@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RoundImageView">
+        <attr name="type" format="enum">
+            <enum name="circle" value="0"/>
+            <enum name="round" value="1"/>
+            <enum name="oval" value="2"/>
+        </attr>
+        <attr name="radius" format="dimension|reference"/>
+        <attr name="corner_radius" format="dimension"/>
+        <attr name="LeftTop_corner_radius" format="dimension"/>
+        <attr name="LeftBottom_corner_radius" format="dimension"/>
+        <attr name="RightTop_corner_radius" format="dimension"/>
+        <attr name="RightBottom_corner_radius" format="dimension"/>
+    </declare-styleable>
+</resources>
