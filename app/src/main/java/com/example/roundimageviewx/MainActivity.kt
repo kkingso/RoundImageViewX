@@ -1,5 +1,6 @@
 package com.example.roundimageviewx
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.roundimageview.RoundImageView
@@ -15,6 +16,8 @@ class MainActivity : AppCompatActivity() {
             .setLeftBottomCornerRadius(20)
             .setRightBottomCornerRadius(5)
             .setRightTopCornerRadius(30)
+            .setBorderWidth(10)
+            .setBorderColor(Color.BLUE)
             .invalidate()
 
     }

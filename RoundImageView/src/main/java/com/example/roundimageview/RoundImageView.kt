@@ -25,6 +25,12 @@ class RoundImageView : AppCompatImageView {
     private var xRadius: Float = 0f
     //view的宽度
     private var xWidth = 0
+    //描边的宽度
+    private var xBorderWidth = 0f
+    //外边框
+    //private var xOutBorderWidth = 0f
+    //描边的颜色
+    private var xBorderColor = 0
     //圆角半径
     private var xCornerRadius: Float = 0f
     private var xLeftTopCornerRadius = 0f
@@ -37,6 +43,7 @@ class RoundImageView : AppCompatImageView {
     private var xMatrix: Matrix = Matrix()
     //绘图的paint
     private var xBitmapPaint: Paint = Paint()
+    private var xBorderPaint: Paint = Paint()
     //圆角图片区域
     private var xRoundRect: RectF = RectF()
     private var xRoundPath:Path = Path()
@@ -59,6 +66,9 @@ class RoundImageView : AppCompatImageView {
 
         val a = context.obtainStyledAttributes(attrs, R.styleable.RoundImageView, 0, 0)
         type = a.getInt(R.styleable.RoundImageView_type, TYPE_OVAL)
+        xBorderWidth = a.getDimension(R.styleable.RoundImageView_border_width,0f)
+        //xOutBorderWidth = a.getDimension(R.styleable.RoundImageView_out_border_width,0f)
+        xBorderColor = a.getColor(R.styleable.RoundImageView_border_color,Color.BLACK)
         //则不管写的是dp还是sp还是px,都会乘以denstiy.
         //xRadius = a.getDimension(R.styleable.RoundImageView_radius, 0)
         xCornerRadius = a.getDimension(R.styleable.RoundImageView_corner_radius,
@@ -76,7 +86,9 @@ class RoundImageView : AppCompatImageView {
         //val xRoundPath = Path()
        // val xMatrix = Matrix()
        // val xBitmapPaint = Paint()
-        xBitmapPaint.setAntiAlias(true)
+        xBitmapPaint.setAntiAlias(true)//防止边缘锯齿
+        xBorderPaint.setAntiAlias(true)
+        xBorderPaint.setStyle(Paint.Style.STROKE)//设置画笔样式，仅描边
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -87,7 +99,7 @@ class RoundImageView : AppCompatImageView {
         * 如果类型是圆形，则强制改变view的宽高一致，以最小值为准*/
         if (type == TYPE_CIRCLE) {//
             xWidth = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec))
-            xRadius = xWidth / 2f
+            xRadius = xWidth / 2 - xBorderWidth / 2
             //setMeasuredDimension(xWidth, xWidth)
         }
     }
@@ -96,7 +108,8 @@ class RoundImageView : AppCompatImageView {
         Log.e("TAG", "onSizeChanged方法")
         super.onSizeChanged(w, h, oldw, oldh)
         if (type == TYPE_ROUND || type == TYPE_OVAL) {
-            xRoundRect = RectF(0f,0f,w.toFloat(),h.toFloat())
+            //圆角图片范围
+            xRoundRect = RectF(xBorderWidth / 2,xBorderWidth / 2,w - xBorderWidth / 2,h - xBorderWidth /2 )
         }
     }
 
@@ -153,20 +166,23 @@ class RoundImageView : AppCompatImageView {
 
     override fun onDraw(canvas: Canvas) {
         Log.e("TAG", "onDraw方法")
+        xBorderPaint.setStrokeWidth(xBorderWidth)
+        xBorderPaint.setColor(xBorderColor)
 
         if (drawable == null) { return }
         setUpShader()
 
         if (type == TYPE_ROUND) {
             setRoundPath()
-            canvas.drawPath(xRoundPath, xBitmapPaint)
         } else if (type == TYPE_CIRCLE){
             setCirclePath()
-            canvas.drawPath(xRoundPath, xBitmapPaint)
         }else if (type == TYPE_OVAL){
             setOvalPath()
-            canvas.drawPath(xRoundPath,xBitmapPaint)
         }
+        //绘制图像
+        canvas.drawPath(xRoundPath, xBitmapPaint)
+        //绘制描边
+        canvas.drawPath(xRoundPath,xBorderPaint)
     }
     //椭圆画笔路径
     private fun setOvalPath() {
@@ -177,7 +193,7 @@ class RoundImageView : AppCompatImageView {
     //圆形画笔路径
     private fun setCirclePath() {
         xRoundPath.reset()
-        xRoundPath.addCircle(xRadius, xRadius, xRadius, Path.Direction.CW)
+        xRoundPath.addCircle(xRadius + xBorderWidth / 2, xRadius + xBorderWidth / 2, xRadius + xBorderWidth / 2, Path.Direction.CW)
     }
 
     /**
@@ -291,6 +307,25 @@ class RoundImageView : AppCompatImageView {
         if (xRightBottomCornerRadius != cornerRadius.toFloat()) {
             xRightBottomCornerRadius = cornerRadius.toFloat()
             //invalidate()
+        }
+        return this
+    }
+    /**
+     * 设置描边宽度
+     */
+    fun setBorderWidth(borderWidth: Int): RoundImageView {
+        var borderWidth = dp2px(borderWidth)
+        if (xBorderWidth != borderWidth.toFloat()) {
+            xBorderWidth = borderWidth.toFloat()
+        }
+        return this
+    }
+    /**
+     * 设置描边颜色
+     */
+    fun setBorderColor(borderColor: Int): RoundImageView {
+        if (xBorderColor != borderColor) {
+            xBorderColor = borderColor
         }
         return this
     }

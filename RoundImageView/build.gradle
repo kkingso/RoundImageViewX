@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 30
@@ -34,3 +35,21 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 }
+
+/*buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.7.0'
+    }
+}
+
+publish {
+    userOrg = 'kinsrain'
+    groupId = 'com.kinsrain'
+    artifactId = 'roundimageviewx'
+    publishVersion = '1.0.0'
+    desc = 'Android RoundImageView'
+    website = 'https://github.com/kkingso/RoundImageViewX.git'
+}*/

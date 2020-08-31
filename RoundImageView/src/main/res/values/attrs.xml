@@ -6,6 +6,9 @@
             <enum name="round" value="1"/>
             <enum name="oval" value="2"/>
         </attr>
+        <attr name="border_width" format="dimension"/>
+        <attr name="out_border_width" format="dimension"/>
+        <attr name="border_color" format="color"/>
         <attr name="radius" format="dimension|reference"/>
         <attr name="corner_radius" format="dimension"/>
         <attr name="LeftTop_corner_radius" format="dimension"/>
